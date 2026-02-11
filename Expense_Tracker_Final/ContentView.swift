@@ -1,61 +1,35 @@
 //
 //  ContentView.swift
-//  Expense_Tracker_Final
+//  Expense Tracker
 //
-//  Created by Aditya Pundlik on 09/02/26.
+//  Created by Aditya Pundlik on 28/01/26.
 //
 
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @AppStorage("FirstTimeUser") private var firstTimeUser: Bool = true
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
+        Group {
+            if UserDefaults.standard.object(forKey: "FirstTimeUser") != nil && firstTimeUser == false {
+                Dashboard()
+            } else {
+                NewUserScreen()
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
         }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+        .onAppear {
+            let key = "FirstTimeUser"
+            let defaults = UserDefaults.standard
+            if defaults.object(forKey: key) == nil {
+                defaults.set(true, forKey: key)
+                firstTimeUser = true
             }
         }
     }
 }
 
-#Preview {
+#Preview("Onboarding") {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }
+

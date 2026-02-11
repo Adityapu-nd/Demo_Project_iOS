@@ -1,32 +1,20 @@
 //
-//  Expense_Tracker_FinalApp.swift
-//  Expense_Tracker_Final
+//  Expense_TrackerApp.swift
+//  Expense Tracker
 //
-//  Created by Aditya Pundlik on 09/02/26.
+//  Created by Aditya Pundlik on 28/01/26.
 //
 
 import SwiftUI
 import SwiftData
 
 @main
-struct Expense_Tracker_FinalApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
+struct Expense_TrackerApp: App {
 
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .modelContainer(for: [Expense.self])
         }
-        .modelContainer(sharedModelContainer)
     }
 }
