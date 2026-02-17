@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct new_user_screen_2: View {
-    var onFinish: (() -> Void)? = nil
-    @State private var goToDashboard = false
+    @AppStorage("ftux") private var ftux: Bool = true
     var body: some View {
         ZStack {
             // Blue/white vertical gradient background
@@ -48,8 +47,7 @@ struct new_user_screen_2: View {
                 Spacer()
 
                 Button(action: {
-                    goToDashboard = true
-                    onFinish?()
+                    ftux = false
                 }) {
                     Text("Continue to Dashboard")
                         .font(.headline)
@@ -64,7 +62,6 @@ struct new_user_screen_2: View {
                 }
                 .padding(.horizontal, 8)
                 .padding(.bottom, 24)
-                NavigationLink(destination: Dashboard(), isActive: $goToDashboard) { EmptyView() }
             }
             .padding(.horizontal, 18)
         }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct NewUserScreen: View {
-    var onFinish: (() -> Void)? = nil
+    @AppStorage("ftux") private var ftux: Bool = true
     @State private var goToIntro = false
     var body: some View {
         NavigationStack {
@@ -44,7 +44,7 @@ struct NewUserScreen: View {
 
                     Spacer(minLength: 24)
 
-                    NavigationLink(destination: new_user_screen_2(onFinish: onFinish), isActive: $goToIntro) {
+                    NavigationLink(destination: new_user_screen_2(), isActive: $goToIntro) {
                         Text("Get Started")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
@@ -62,7 +62,7 @@ struct NewUserScreen: View {
                     HStack {
                         Spacer()
                         Button(action: {
-                            onFinish?()
+                            ftux = false
                         }) {
                             Text("Skip")
                                 .font(.subheadline)

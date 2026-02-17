@@ -11,14 +11,13 @@ import SwiftData
 
 
 struct Dashboard: View {
-    @AppStorage("FirstTimeUser") private var firstTimeUser: Bool = false
+    @AppStorage("ftux") private var ftux: Bool = true
 
     @Query(sort: \Expense.date, order: .reverse) private var expenses: [Expense]
     @StateObject private var viewModel = DashboardViewModel()
     @State private var showAddExpense = false
     @State private var showAnalytics = false
     @State private var showAllExpenses = false
-    @State private var showOnboarding = false
 
     var body: some View {
         NavigationStack {
@@ -32,12 +31,7 @@ struct Dashboard: View {
                                 .font(.system(size: 34, weight: .bold))
                                 .foregroundColor(Color(red: 0.22, green: 0.47, blue: 0.87))
                             Spacer()
-                            Button(action: {}) {
-                                Image(systemName: "ellipsis.circle")
-                                    .font(.title2)
-                                    .foregroundColor(Color(red: 0.22, green: 0.47, blue: 0.87).opacity(0.85))
                             }
-                        }
                         .padding([.top, .horizontal])
                         .padding(.bottom, 8)
 
@@ -163,17 +157,7 @@ struct Dashboard: View {
                 Add_Expense_Screen()
             }
             .onAppear {
-                if firstTimeUser {
-                    showOnboarding = true
-                }
-            }
-            .fullScreenCover(isPresented: $showOnboarding, onDismiss: {
-                firstTimeUser = false
-            }) {
-                NewUserScreen(onFinish: {
-                    showOnboarding = false
-                    firstTimeUser = false
-                })
+                ftux = false
             }
         }
     }

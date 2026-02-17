@@ -9,13 +9,15 @@ import SwiftUI
 
 struct ContentView: View {
     @AppStorage("FirstTimeUser") private var firstTimeUser: Bool = true
+    @State private var onboardingActive: Bool = false
 
     var body: some View {
         Group {
             if UserDefaults.standard.object(forKey: "FirstTimeUser") != nil && firstTimeUser == false {
                 Dashboard()
             } else {
-                NewUserScreen()
+                NewUserScreen(
+                                    )
             }
         }
         .onAppear {
@@ -32,4 +34,3 @@ struct ContentView: View {
 #Preview("Onboarding") {
     ContentView()
 }
-

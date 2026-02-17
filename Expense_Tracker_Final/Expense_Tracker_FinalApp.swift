@@ -10,11 +10,14 @@ import SwiftData
 
 @main
 struct Expense_TrackerApp: App {
-
+    @AppStorage("ftux") private var ftux: Bool = true
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .modelContainer(for: [Expense.self])
+            if ftux {
+                NewUserScreen()
+            } else {
+                Dashboard()
+            }
         }
     }
 }
