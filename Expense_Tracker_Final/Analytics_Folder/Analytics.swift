@@ -32,7 +32,6 @@ struct Analytics: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-
                 // Header
                 VStack(spacing: 6) {
                     HStack {
