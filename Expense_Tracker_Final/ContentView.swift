@@ -16,8 +16,7 @@ struct ContentView: View {
             if UserDefaults.standard.object(forKey: "FirstTimeUser") != nil && firstTimeUser == false {
                 Dashboard()
             } else {
-                NewUserScreen(
-                                    )
+                NewUserScreen()
             }
         }
         .onAppear {

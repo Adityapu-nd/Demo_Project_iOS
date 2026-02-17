@@ -15,8 +15,10 @@ struct Expense_TrackerApp: App {
         WindowGroup {
             if ftux {
                 NewUserScreen()
+                    .modelContainer(for: [Expense.self])
             } else {
                 Dashboard()
+                    .modelContainer(for: [Expense.self])
             }
         }
     }
