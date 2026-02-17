@@ -34,7 +34,7 @@ struct Add_Expense_Screen: View {
     // Helper to round to 2 decimals
     func roundedAmountText(_ text: String) -> String {
         if let value = Double(text) {
-            return String(format: "%.2f", value)
+            return String(format: "%.2f", Double(value))
         }
         return text
     }
@@ -202,7 +202,7 @@ struct Add_Expense_Screen: View {
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 14)
                             .foregroundStyle(.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 1, style: .continuous))
+                            .clipShape(RoundedRectangle(cornerRadius: 1,style: .continuous))
                             .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
                     }
                     .background(

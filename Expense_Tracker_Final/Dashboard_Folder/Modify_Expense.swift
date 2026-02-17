@@ -44,7 +44,7 @@ struct Modify_Expense: View {
     }
     func roundedAmountText(_ text: String) -> String {
         if let value = Double(text) {
-            return String(format: "%.2f", value)
+            return String(format: "%.2f", Double(value))
         }
         return text
     }

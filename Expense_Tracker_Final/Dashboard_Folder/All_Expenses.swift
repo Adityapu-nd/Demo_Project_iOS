@@ -13,6 +13,29 @@ struct All_Expenses: View {
     @State private var showModifySheet = false
     @Environment(\.dismiss) private var dismiss
     
+    enum SortOption: String, CaseIterable, Identifiable {
+        case dateDesc = "Date (Newest First)"
+        case dateAsc = "Date (Oldest First)"
+        case priceDesc = "Price (High to Low)"
+        case priceAsc = "Price (Low to High)"
+        var id: String { self.rawValue }
+    }
+    
+    @State private var selectedSort: SortOption = .dateDesc
+    
+    private var sortedExpenses: [Expense] {
+        switch selectedSort {
+        case .dateDesc:
+            return expenses.sorted { $0.date > $1.date }
+        case .dateAsc:
+            return expenses.sorted { $0.date < $1.date }
+        case .priceDesc:
+            return expenses.sorted { $0.amount > $1.amount }
+        case .priceAsc:
+            return expenses.sorted { $0.amount < $1.amount }
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -32,7 +55,25 @@ struct All_Expenses: View {
                             Spacer()
                         }
                         .padding([.top, .horizontal])
-                        ForEach(expenses) { expense in
+                        // Sorting dropdown
+                        HStack {
+                            Text("Sort by:")
+                                .foregroundColor(Color(red: 0.22, green: 0.47, blue: 0.87))
+                                .font(.headline)
+                            Picker("Sort by", selection: $selectedSort) {
+                                ForEach(SortOption.allCases) { option in
+                                    Text(option.rawValue).tag(option)
+                                }
+                            }
+                            .pickerStyle(MenuPickerStyle())
+                            .accentColor(Color(red: 0.22, green: 0.47, blue: 0.87))
+                            .frame(minWidth: 200, alignment: .leading) // Make the picker wider
+                            .layoutPriority(1)
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        .padding(.bottom, 8)
+                        ForEach(sortedExpenses) { expense in
                             DashboardExpenseRow(
                                 expense: expense,
                                 onModify: {
