@@ -1,5 +1,4 @@
-//
-//  Add_Expense_Screen.swift
+//  Add_Expensemat strin_Screen.swift
 //  Expense Tracker
 //
 //  Created by Aditya Pundlik on 28/01/26.
@@ -16,7 +15,10 @@ struct Add_Expense_Screen: View {
     @State private var selectedCategory: String? = nil
     @State private var date: Date = .now
     @State private var paymentMethod: String = "Cash"
+    @State private var currency: String = "INR"
     @State private var note: String = ""
+
+    private let currencyConverter = CurrencyConverter.shared
 
     // Validation computed property
     var isAmountValid: Bool {
@@ -138,6 +140,23 @@ struct Add_Expense_Screen: View {
                     .background(Color.white)
 
                     Divider()
+                    
+                    HStack {
+                        Text("Currency")
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Picker("Currency", selection: $currency) {
+                            Text("INR").tag("INR")
+                            Text("USD").tag("USD")
+                            Text("EUR").tag("EUR")
+                            Text("GBP").tag("GBP")
+                        }
+                        .pickerStyle(.menu)
+                    }
+                    .padding()
+                    .background(Color.white)
+
+                    Divider()
 
                     // Note row
                     HStack {
@@ -174,18 +193,20 @@ struct Add_Expense_Screen: View {
                     }
 
                     Button(action: {
-                        // Round to 2 decimals if needed
                         amountText = roundedAmountText(amountText)
+                        var amountToSave = Double(amountText) ?? 0.0
+                        if currency != "INR" {
+                            amountToSave = currencyConverter.convertToINR(amount: amountToSave, from: currency)
+                        }
                         do {
                             try ExpenseStore.addExpense(
                                 modelContext: modelContext,
-                                amountText: amountText,
+                                amountText: String(format: "%.2f", amountToSave),
                                 category: selectedCategory,
                                 date: date,
                                 paymentMethodString: paymentMethod,
                                 note: note
                             )
-                            // Optionally reset fields after save
                             amountText = ""
                             selectedCategory = "Food"
                             date = .now
@@ -193,7 +214,6 @@ struct Add_Expense_Screen: View {
                             note = ""
                             dismiss()
                         } catch {
-                            // Handle invalid input or save errors as needed
                             print("Failed to save expense: \(error)")
                         }
                     }) {
